@@ -5,5 +5,7 @@ export function request(url, method, data) {
         },
         method: method || 'GET',
         body: data ? JSON.stringify(data) : undefined,
-    }).then(res => res.json())
+    }).then(res => {
+       return res.json();
+    })
 }

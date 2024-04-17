@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
 import { request } from '../../../request';
+import { useNavigate } from 'react-router';
 
 
 const regFormSchema = yup.object().shape({
@@ -45,6 +45,7 @@ const RegisterContainer = ({ className }) => {
 	});
 
 	const [serverError, setServerError] = useState(null);
+	const navigate = useNavigate();
 	
 	const onSubmit = ({ login, password }) => {
 		request('/register', 'POST', { login, password }).then(({ error, user }) => {
@@ -53,10 +54,8 @@ const RegisterContainer = ({ className }) => {
 				return;
 			}
 			sessionStorage.setItem('userData', JSON.stringify(user));
-
-			if (user.login === login && user.password === password) {
-				return <Navigate to="/form" />;
-			}
+			
+			return navigate("/form");
 
 		});
 	};

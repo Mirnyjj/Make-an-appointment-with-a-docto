@@ -6,5 +6,20 @@ export default defineConfig({
   plugins: [react()],
   server: {
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    }
+  },
+  resolve: {
+    alias: {
+        './runtimeConfig': './runtimeConfig.browser'
+    }
+  },
+  define: {
+      _global: ({})
   }
 })

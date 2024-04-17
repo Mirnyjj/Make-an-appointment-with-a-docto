@@ -15,7 +15,7 @@ const ApplicationsFromTheFormContainer = ({className}) => {
     
         useEffect(() => {
             request(`/form?search=${searchPhrase}&page=${page}&limit=${PAGINATION_LIMIT}`).then(
-                ({ data: { forms, lastPage } }) => {
+                ({data: {forms, lastPage}}) => {
                     setForm(forms);
                     setLastPage(lastPage);
                 },
@@ -31,37 +31,39 @@ const ApplicationsFromTheFormContainer = ({className}) => {
     
         return (
             <div className={className}>
+                <div className="forms">
                     <div className="title">Заявки с формы</div>
-                <div className="form-and-search">
-                    <Search searchPhrase={searchPhrase} onChange={onSearch} />
-                    {form ? (
-                        <div className="form-list">
-                                    <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Дата отправки</th>
-                                            <th>ФИО</th>
-                                            <th>Телефон</th>
-                                            <th>Проблема</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            {form.map(
-                                ({ id, publishedAt, name, telephone, title}) => (
-                                        <tr key={id}>
-                                            <td>{publishedAt}</td>
-                                            <td>{name}</td>
-                                            <td>{telephone}</td>
-                                            <td>{title}</td>
-                                        </tr>
-                                ),
-                                )}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <div className="no-forms-found">Формы не найдены</div>
-                    )}
+                    <div className="form-and-search">
+                        <Search searchPhrase={searchPhrase} onChange={onSearch} />
+                        {form ? (
+                            <div className="form-list">
+                                        <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Дата отправки</th>
+                                                <th>ФИО</th>
+                                                <th>Телефон</th>
+                                                <th>Проблема</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                {form.map(
+                                    ({ id, publishedAt, name, telephone, title}) => (
+                                            <tr key={id}>
+                                                <td>{publishedAt}</td>
+                                                <td>{name}</td>
+                                                <td>{telephone}</td>
+                                                <td>{title}</td>
+                                            </tr>
+                                    ),
+                                    )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <div className="no-forms-found">Формы не найдены</div>
+                        )}
+                    </div>
                 </div>
                 {lastPage > 1 && form && (
                     <Pagination page={page} lastPage={lastPage} setPage={setPage} />
@@ -73,18 +75,20 @@ const ApplicationsFromTheFormContainer = ({className}) => {
     export const ApplicationsFromTheForm = styled(ApplicationsFromTheFormContainer)`
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    
 
-    
-        & .form-list {
+        .forms {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-list {
             display: flex;
             flex-wrap: wrap;
-            padding: 20px 20px 80px;
+            padding: 20px 20px 20px;
         }
     
-        & .no-forms-found {
+        .no-forms-found {
             font-size: 18px;
             margin-top: 40px;
             text-align: center;

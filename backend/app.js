@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -18,12 +18,14 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
+
     try {
         const { user, token } = await register(req.body.login, req.body.password);
 
         res.cookie('token', token, { httpOnly: true })
             .send({ error: null, user: mapUser(user) });
     } catch (e) {
+        console.log(e)
         res.send({ error: e.message || "Неизвестная ошибка" })
     }
 })
@@ -41,6 +43,7 @@ app.post('/login', async (req, res) => {
 
 
 app.get('/form', async (req, res) => {
+
     const { forms, lastPage } = await getForm(
         req.query.search,
         req.query.limit,
@@ -66,6 +69,10 @@ app.get('/users', async (req, res) => {
 
     res.send({ data: users.map(mapUser) })
 })
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+});
 
 mongoose.connect(
     process.env.DB_CONNECTION_STRING
